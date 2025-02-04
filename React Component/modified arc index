@@ -1,0 +1,10 @@
+import ReactDOM from "react-dom"
+import WalletConnector from "./components/WalletConnector"
+
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("carpool-wallet-connect")
+  if (container) {
+    ReactDOM.render(<WalletConnector />, container)
+  }
+})
+
