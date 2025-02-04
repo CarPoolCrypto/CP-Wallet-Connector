@@ -20,3 +20,9 @@ To complete the implementation, you'll need to:
 
 
 Remember to thoroughly test this implementation, especially the blockchain interactions and financial calculations, to ensure everything works correctly and securely.
+
+
+To use this wallet connector in your WordPress site:
+
+1. Install and activate the plugin in your WordPress admin panel.
+2. Add the shortcode `[cardano_wallet_connector]` wherever you want the wallet connector to appear on your site.
