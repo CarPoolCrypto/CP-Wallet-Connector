@@ -1,0 +1,13 @@
+carpool-wallet-connect/
+├── carpool-wallet-connect.php
+├── includes/
+│   ├── enqueue-scripts.php
+│   ├── cardano-api.php
+│   ├── user-roles.php
+│   ├── woocommerce-integration.php
+│   └── delegation-tracker.php
+├── src/
+│   └── components/
+│       └── WalletConnector.tsx
+└── build/
+    └── index.js
