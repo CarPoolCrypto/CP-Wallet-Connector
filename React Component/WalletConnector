@@ -1,0 +1,130 @@
+import type React from "react"
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+
+declare global {
+  interface Window {
+    cardano: any
+  }
+}
+
+interface DelegationInfo {
+  pool: string
+  amount: number
+  epochs: number
+}
+
+// Assuming carpoolWalletData is fetched from somewhere else, like props or context.  Replace with your actual implementation.
+const carpoolWalletData = { nonce: "your_nonce_here" } // Replace 'your_nonce_here' with the actual nonce
+
+const WalletConnector: React.FC = () => {
+  const [wallet, setWallet] = useState<string | null>(null)
+  const [address, setAddress] = useState<string | null>(null)
+  const [balance, setBalance] = useState<string | null>(null)
+  const [delegation, setDelegation] = useState<DelegationInfo | null>(null)
+  const [discountTier, setDiscountTier] = useState<string | null>(null)
+
+  useEffect(() => {
+    const checkWallet = async () => {
+      if (typeof window.cardano !== "undefined") {
+        const walletName = await window.cardano.nami.name
+        setWallet(walletName)
+      }
+    }
+
+    checkWallet()
+  }, [])
+
+  const connectWallet = async () => {
+    if (typeof window.cardano !== "undefined") {
+      try {
+        await window.cardano.nami.enable()
+        const walletAddress = await window.cardano.nami.getAddress()
+        setAddress(walletAddress)
+
+        const walletBalance = await window.cardano.nami.getBalance()
+        setBalance((Number.parseInt(walletBalance) / 1000000).toFixed(2))
+
+        // Fetch delegation info from the server
+        const response = await fetch("/wp-admin/admin-ajax.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            action: "get_delegation_info",
+            nonce: carpoolWalletData.nonce,
+            address: walletAddress,
+          }),
+        })
+
+        const data = await response.json()
+        if (data.success) {
+          setDelegation(data.delegation)
+          setDiscountTier(data.discountTier)
+        }
+      } catch (error) {
+        console.error("Error connecting wallet:", error)
+      }
+    } else {
+      console.error("Cardano wallet not found")
+    }
+  }
+
+  const delegateToCarPool = async () => {
+    // Implement delegation logic here
+    console.log("Delegating to CarPool...")
+  }
+
+  return (
+    <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>CarPool Wallet Connect</CardTitle>
+        <CardDescription>Connect your Cardano wallet and delegate to CarPool</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {wallet ? (
+          <div className="space-y-2">
+            <p>Wallet: {wallet}</p>
+            {address && (
+              <p>
+                Address: {address.slice(0, 10)}...{address.slice(-10)}
+              </p>
+            )}
+            {balance && <p>Balance: {balance} ADA</p>}
+            {delegation && (
+              <div>
+                <p>Delegated to: {delegation.pool}</p>
+                <p>Amount: {delegation.amount} ADA</p>
+                <p>Epochs: {delegation.epochs}</p>
+              </div>
+            )}
+            {discountTier && (
+              <Alert>
+                <AlertTitle>Discount Tier</AlertTitle>
+                <AlertDescription>{discountTier}</AlertDescription>
+              </Alert>
+            )}
+          </div>
+        ) : (
+          <p>No wallet detected</p>
+        )}
+      </CardContent>
+      <CardFooter className="flex flex-col space-y-2">
+        <Button onClick={connectWallet} disabled={!wallet} className="w-full">
+          {wallet ? "Connect Wallet" : "Install Wallet"}
+        </Button>
+        {wallet && delegation?.pool !== "CarPool" && (
+          <Button onClick={delegateToCarPool} className="w-full">
+            Delegate to CarPool
+          </Button>
+        )}
+      </CardFooter>
+    </Card>
+  )
+}
+
+export default WalletConnector
+
