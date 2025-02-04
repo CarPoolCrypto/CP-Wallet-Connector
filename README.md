@@ -11,8 +11,8 @@ Implementation steps:
 
 1. Create the directory structure as shown at the beginning of this response.
 2. Copy each file's content into its respective file in your plugin directory.
-3. Replace `'your_blockfrost_api_key_here'` in `blockfrost-api.php` with your actual Blockfrost API key.
-4. Replace `'your_stake_pool_id_here'` in `blockfrost-api.php` with CarPool's actual stake pool ID.
+3. Replace `'your_blockfrost_api_key_here'` in `blockfrost-api.php` with your actual Blockfrost API key. (DONE)
+4. Replace `'your_stake_pool_id_here'` in `blockfrost-api.php` with CarPool's actual stake pool ID.  (DONE)
 5. Add wallet icons (PNG format) for each supported wallet in the `images/` directory.
 6. In your plugin directory, run `npm install` to install the necessary dependencies.
 7. Run `npm run build` to build the React component.
