@@ -1,13 +1,29 @@
 carpool-wallet-connect/
 ├── carpool-wallet-connect.php
 ├── includes/
-│   ├── enqueue-scripts.php
-│   ├── cardano-api.php
-│   ├── user-roles.php
-│   ├── woocommerce-integration.php
-│   └── delegation-tracker.php
+│   └── ... (PHP files remain the same)
 ├── src/
-│   └── components/
-│       └── WalletConnector.tsx
-└── build/
-    └── index.js
+│   ├── components/
+│   │   ├── ui/
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── select.tsx
+│   │   │   └── alert.tsx
+│   │   └── WalletConnector.tsx
+│   └── index.tsx
+├── styles/
+│   └── globals.css
+├── build/
+│   └── index.js
+├── images/
+    ├── eternl-icon.png
+    ├── vespr-icon.png
+    ├── lace-icon.png
+    ├── nufi-icon.png
+    ├── begin-wallet-icon.png
+    ├── yoroi-icon.png
+    └── game-changer-icon.png
+├── package.json
+├── tsconfig.json
+├── postcss.config.js
+└── tailwind.config.js
