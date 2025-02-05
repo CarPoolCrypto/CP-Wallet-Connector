@@ -7,15 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Render HeaderWalletConnect
   const headerWalletConnectContainer = document.getElementById('carpool-wallet-connect');
   if (headerWalletConnectContainer) {
-    const iconColor = headerWalletConnectContainer.dataset.iconColor || '#000000';
+    const iconColor = headerWalletConnectContainer.getAttribute('data-icon-color') || '#000000';
     ReactDOM.render(<HeaderWalletConnect iconColor={iconColor} />, headerWalletConnectContainer);
   }
 
   // Render StakeButtons
   const stakeButtons = document.getElementsByClassName('carpool-stake-button');
   Array.from(stakeButtons).forEach((button) => {
-    const text = button.dataset.text || 'Stake with CarPool';
-    const color = button.dataset.color || '#000000';
+    const text = button.getAttribute('data-text') || 'Stake with CarPool';
+    const color = button.getAttribute('data-color') || '#000000';
     ReactDOM.render(
       <StakeButton 
         text={text} 
