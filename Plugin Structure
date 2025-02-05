@@ -1,7 +1,11 @@
 carpool-wallet-connect/
-├── carpool-wallet-connect.php
+├── carpool-wallet-connect.php (main plugin file)
 ├── includes/
-│   └── ... (PHP files remain the same)
+│   ├── class-carpool-api.php
+│   ├── class-carpool-user-roles.php
+│   ├── class-carpool-wallet-connect.php
+│   ├── class-carpool-woocommerce-integration.php
+│   └── class-carpool-cron.php
 ├── src/
 │   ├── components/
 │   │   ├── ui/
@@ -10,11 +14,13 @@ carpool-wallet-connect/
 │   │   │   ├── select.tsx
 │   │   │   └── alert.tsx
 │   │   └── WalletConnector.tsx
+│   ├── lib/
+│   │   └── utils.ts
+│   ├── styles/
+│   │   └── globals.css
 │   └── index.tsx
-├── styles/
-│   └── globals.css
 ├── build/
-│   └── index.js
+│   └── index.js (compiled JavaScript)
 ├── images/
     ├── eternl-icon.png
     ├── vespr-icon.png
@@ -23,7 +29,8 @@ carpool-wallet-connect/
     ├── begin-wallet-icon.png
     ├── yoroi-icon.png
     └── game-changer-icon.png
-├── package.json
+├── webpack.config.js
 ├── tsconfig.json
 ├── postcss.config.js
-└── tailwind.config.js
+├── tailwind.config.js
+└── package.json
