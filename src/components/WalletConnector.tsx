@@ -1,39 +1,35 @@
-// src/components/WalletConnector.tsx
-
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type React from "react"
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface CardanoWallet {
-  name: string;
-  icon: string;
-  api: any;
+  name: string
+  icon: string
+  api: any
 }
 
 interface DelegationInfo {
-  pool: string;
-  amount: number;
-  epochs: number;
+  pool: string
+  amount: number
+  epochs: number
 }
 
-// This should be passed as a prop or fetched from a global state
-const carpoolWalletData = { nonce: "your_nonce_here" };
+interface WalletConnectorProps {
+  onClose?: () => void
+  buttonColor?: string
+}
 
-const WalletConnector: React.FC = () => {
-  const [availableWallets, setAvailableWallets] = useState<CardanoWallet[]>([]);
-  const [selectedWallet, setSelectedWallet] = useState<CardanoWallet | null>(null);
-  const [address, setAddress] = useState<string | null>(null);
-  const [balance, setBalance] = useState<string | null>(null);
-  const [delegation, setDelegation] = useState<DelegationInfo | null>(null);
-  const [discountTier, setDiscountTier] = useState<string | null>(null);
-  const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
+const WalletConnector: React.FC<WalletConnectorProps> = ({ onClose, buttonColor = "#000000" }) => {
+  const [availableWallets, setAvailableWallets] = useState<CardanoWallet[]>([])
+  const [selectedWallet, setSelectedWallet] = useState<CardanoWallet | null>(null)
+  const [address, setAddress] = useState<string | null>(null)
+  const [delegation, setDelegation] = useState<DelegationInfo | null>(null)
 
   useEffect(() => {
     const checkWallets = async () => {
-      const wallets: CardanoWallet[] = [];
-
+      const wallets: CardanoWallet[] = []
       if ((window as any).cardano) {
         for (const walletKey in (window as any).cardano) {
           if (typeof (window as any).cardano[walletKey]?.enable === "function") {
@@ -41,74 +37,62 @@ const WalletConnector: React.FC = () => {
               name: walletKey,
               icon: `/images/${walletKey.toLowerCase()}-icon.png`,
               api: (window as any).cardano[walletKey],
-            });
+            })
           }
         }
       }
-
-      setAvailableWallets(wallets);
-    };
-
-    checkWallets();
-  }, []);
+      setAvailableWallets(wallets)
+    }
+    checkWallets()
+  }, [])
 
   const connectWallet = async (wallet: CardanoWallet) => {
     try {
-      await wallet.api.enable();
-      setSelectedWallet(wallet);
+      await wallet.api.enable()
+      setSelectedWallet(wallet)
+      const walletAddress = await wallet.api.getUsedAddresses()
+      setAddress(walletAddress[0])
+      await checkDelegation(walletAddress[0])
+    } catch (error) {
+      console.error("Error connecting wallet:", error)
+    }
+  }
 
-      const walletAddress = await wallet.api.getUsedAddresses();
-      setAddress(walletAddress[0]);
-
-      const walletBalance = await wallet.api.getBalance();
-      setBalance((Number.parseInt(walletBalance) / 1000000).toFixed(2));
-
+  const checkDelegation = async (address: string) => {
+    try {
       const response = await fetch("/wp-admin/admin-ajax.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-          action: "connect_wallet",
-          nonce: carpoolWalletData.nonce,
-          wallet_address: walletAddress[0],
+          action: "check_delegation",
+          address: address,
         }),
-      });
-
-      const data = await response.json();
+      })
+      const data = await response.json()
       if (data.success) {
-        setDelegation(data.delegation);
-        setDiscountTier(data.discountTier);
-        setDiscountPercentage(data.discountPercentage);
+        setDelegation(data.delegation)
       }
     } catch (error) {
-      console.error("Error connecting wallet:", error);
+      console.error("Error checking delegation:", error)
     }
-  };
-
-  const delegateToCarPool = async () => {
-    if (!selectedWallet) return;
-
-    console.log("Delegating to CarPool...");
-    // Implement delegation logic here
-  };
+  }
 
   return (
-    <Card className="w-[350px]">
+    <Card>
       <CardHeader>
-        <CardTitle>CarPool Wallet Connect</CardTitle>
-        <CardDescription>Connect your Cardano wallet and delegate to CarPool</CardDescription>
+        <CardTitle>Connect Wallet</CardTitle>
       </CardHeader>
       <CardContent>
         {selectedWallet ? (
-          <div className="space-y-2">
-            <p>Wallet: {selectedWallet.name}</p>
+          <div>
+            <p>Connected: {selectedWallet.name}</p>
             {address && (
               <p>
-                Address: {address.slice(0, 10)}...{address.slice(-10)}
+                Address: {address.slice(0, 8)}...{address.slice(-8)}
               </p>
             )}
-            {balance && <p>Balance: {balance} ADA</p>}
             {delegation && (
               <div>
                 <p>Delegated to: {delegation.pool}</p>
@@ -116,24 +100,15 @@ const WalletConnector: React.FC = () => {
                 <p>Epochs: {delegation.epochs}</p>
               </div>
             )}
-            {discountTier && (
-              <Alert>
-                <AlertTitle>Discount Tier</AlertTitle>
-                <AlertDescription>{discountTier}</AlertDescription>
-              </Alert>
-            )}
-            {discountPercentage !== null && (
-              <Alert>
-                <AlertTitle>Your Discount</AlertTitle>
-                <AlertDescription>{discountPercentage}% off all purchases</AlertDescription>
-              </Alert>
-            )}
+            <Button onClick={onClose} style={{ backgroundColor: buttonColor }}>
+              Close
+            </Button>
           </div>
         ) : (
           <Select
             onValueChange={(value) => {
-              const wallet = availableWallets.find((w) => w.name === value);
-              if (wallet) connectWallet(wallet);
+              const wallet = availableWallets.find((w) => w.name === value)
+              if (wallet) connectWallet(wallet)
             }}
           >
             <SelectTrigger>
@@ -154,15 +129,9 @@ const WalletConnector: React.FC = () => {
           </Select>
         )}
       </CardContent>
-      <CardFooter className="flex flex-col space-y-2">
-        {selectedWallet && delegation?.pool !== "CarPool" && (
-          <Button onClick={delegateToCarPool} className="w-full">
-            Delegate to CarPool
-          </Button>
-        )}
-      </CardFooter>
     </Card>
-  );
-};
+  )
+}
 
-export default WalletConnector;
+export default WalletConnector
+
