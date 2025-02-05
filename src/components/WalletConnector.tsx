@@ -1,3 +1,5 @@
+// src/components/WalletConnector.tsx
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,8 +18,8 @@ interface DelegationInfo {
   epochs: number;
 }
 
-// Assuming carpoolWalletData is fetched from somewhere else, like props or context
-const carpoolWalletData = { nonce: "your_nonce_here" }; // Replace with actual implementation
+// This should be passed as a prop or fetched from a global state
+const carpoolWalletData = { nonce: "your_nonce_here" };
 
 const WalletConnector: React.FC = () => {
   const [availableWallets, setAvailableWallets] = useState<CardanoWallet[]>([]);
@@ -26,6 +28,7 @@ const WalletConnector: React.FC = () => {
   const [balance, setBalance] = useState<string | null>(null);
   const [delegation, setDelegation] = useState<DelegationInfo | null>(null);
   const [discountTier, setDiscountTier] = useState<string | null>(null);
+  const [discountPercentage, setDiscountPercentage] = useState<number | null>(null);
 
   useEffect(() => {
     const checkWallets = async () => {
@@ -36,7 +39,7 @@ const WalletConnector: React.FC = () => {
           if (typeof (window as any).cardano[walletKey]?.enable === "function") {
             wallets.push({
               name: walletKey,
-              icon: `/images/${walletKey.toLowerCase()}-icon.png`, // You'll need to provide these icons
+              icon: `/images/${walletKey.toLowerCase()}-icon.png`,
               api: (window as any).cardano[walletKey],
             });
           }
@@ -55,21 +58,20 @@ const WalletConnector: React.FC = () => {
       setSelectedWallet(wallet);
 
       const walletAddress = await wallet.api.getUsedAddresses();
-      setAddress(walletAddress[0]); // Using the first used address
+      setAddress(walletAddress[0]);
 
       const walletBalance = await wallet.api.getBalance();
       setBalance((Number.parseInt(walletBalance) / 1000000).toFixed(2));
 
-      // Fetch delegation info from the server
       const response = await fetch("/wp-admin/admin-ajax.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-          action: "get_delegation_info",
+          action: "connect_wallet",
           nonce: carpoolWalletData.nonce,
-          address: walletAddress[0],
+          wallet_address: walletAddress[0],
         }),
       });
 
@@ -77,6 +79,7 @@ const WalletConnector: React.FC = () => {
       if (data.success) {
         setDelegation(data.delegation);
         setDiscountTier(data.discountTier);
+        setDiscountPercentage(data.discountPercentage);
       }
     } catch (error) {
       console.error("Error connecting wallet:", error);
@@ -86,9 +89,8 @@ const WalletConnector: React.FC = () => {
   const delegateToCarPool = async () => {
     if (!selectedWallet) return;
 
-    // Implement delegation logic here
     console.log("Delegating to CarPool...");
-    // You'll need to implement the actual delegation transaction here
+    // Implement delegation logic here
   };
 
   return (
@@ -118,6 +120,12 @@ const WalletConnector: React.FC = () => {
               <Alert>
                 <AlertTitle>Discount Tier</AlertTitle>
                 <AlertDescription>{discountTier}</AlertDescription>
+              </Alert>
+            )}
+            {discountPercentage !== null && (
+              <Alert>
+                <AlertTitle>Your Discount</AlertTitle>
+                <AlertDescription>{discountPercentage}% off all purchases</AlertDescription>
               </Alert>
             )}
           </div>
