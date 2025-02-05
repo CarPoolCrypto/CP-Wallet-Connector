@@ -2,7 +2,7 @@
 /*
 Plugin Name: CarPool Wallet Connect
 Description: Connect Cardano wallets
-Version: 1.1
+Version: 1.2
 Author: CarPoolHealth
 */
 
@@ -34,7 +34,8 @@ class CarPool_Wallet_Connect_Plugin {
     }
 
     public function enqueue_scripts() {
-        wp_enqueue_script('carpool-wallet-connect', plugin_dir_url(__FILE__) . 'build/index.js', array(), '1.1', true);
+        wp_enqueue_script('carpool-wallet-connect', plugin_dir_url(__FILE__) . 'build/index.js', array('wp-element'), '1.2', true);
+        wp_enqueue_style('carpool-wallet-connect', plugin_dir_url(__FILE__) . 'build/style.css', array(), '1.2');
         wp_localize_script('carpool-wallet-connect', 'carpoolWalletData', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('carpool-wallet-connect'),
@@ -43,7 +44,7 @@ class CarPool_Wallet_Connect_Plugin {
 
     public function wallet_connect_shortcode($atts) {
         $a = shortcode_atts(array(
-            'icon_color' => '#000000',
+            'icon_color' => '#0cc43e',
         ), $atts);
 
         return '<div id="carpool-wallet-connect" data-icon-color="' . esc_attr($a['icon_color']) . '"></div>';
@@ -52,16 +53,27 @@ class CarPool_Wallet_Connect_Plugin {
     public function stake_button_shortcode($atts) {
         $a = shortcode_atts(array(
             'text' => 'Stake with CarPool',
-            'color' => '#000000',
+            'color' => '#0cc43e',
         ), $atts);
 
         return '<div class="carpool-stake-button" data-text="' . esc_attr($a['text']) . '" data-color="' . esc_attr($a['color']) . '"></div>';
     }
 
     public function check_delegation() {
-        // Implement delegation check logic here
-        // This should query the Cardano blockchain or your database
-        // Return delegation info as JSON
+        check_ajax_referer('carpool-wallet-connect', 'nonce');
+        
+        $user_id = get_current_user_id();
+        if (!$user_id) {
+            wp_send_json_error(array('message' => 'User not logged in.'));
+        }
+
+        $delegated_amount = $this->api->get_user_delegated_amount($user_id);
+        $delegation_epochs = $this->api->get_user_delegation_epochs($user_id);
+
+        wp_send_json_success(array(
+            'delegated_amount' => $delegated_amount,
+            'delegation_epochs' => $delegation_epochs
+        ));
     }
 
     public function check_content_permissions($content) {
@@ -75,8 +87,9 @@ class CarPool_Wallet_Connect_Plugin {
     }
 
     private function user_is_delegated() {
-        // Implement logic to check if the current user is delegated to CarPool
-        // This might involve checking user meta or querying the blockchain
+        $user_id = get_current_user_id();
+        $delegated_amount = get_user_meta($user_id, 'carpool_delegated_amount', true);
+        return $delegated_amount > 0;
     }
 }
 
