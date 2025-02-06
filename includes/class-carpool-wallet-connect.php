@@ -15,10 +15,14 @@ class CarPool_Wallet_Connect {
     }
 
     public function connect_wallet() {
-        // Verify nonce and user permissions
-
+        check_ajax_referer('carpool-wallet-connect', 'nonce');
+        
         $wallet_address = sanitize_text_field($_POST['wallet_address']);
         $user_id = get_current_user_id();
+
+        if (!$user_id) {
+            wp_send_json_error(array('message' => 'User not logged in.'));
+        }
 
         update_user_meta($user_id, 'carpool_wallet_address', $wallet_address);
 
@@ -29,6 +33,11 @@ class CarPool_Wallet_Connect {
 
     public function update_delegation_info() {
         $user_id = get_current_user_id();
+
+        if (!$user_id) {
+            wp_send_json_error(array('message' => 'User not logged in.'));
+        }
+
         $delegated_amount = $this->api->get_user_delegated_amount($user_id);
         $delegation_epochs = $this->api->get_user_delegation_epochs($user_id);
 
