@@ -1,20 +1,41 @@
-# CP-Wallet-Connector
+=== CarPool Wallet Connect ===
+Contributors: YourName
+Tags: cardano, wallet, staking, woocommerce
+Requires at least: 5.0
+Tested up to: 6.2
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Implementation steps:
+Connect Cardano wallets and provide tiered discounts for CarPool delegators.
 
-1. Create the directory structure as shown at the beginning of this response.
-2. Copy each file's content into its respective file in your plugin directory.
-3. Replace `'your_blockfrost_api_key_here'` 
-4. Replace `'your_stake_pool_id_here'` 
-5. Add wallet icons (PNG format) for each supported wallet in the `images/` directory.
-6. In your plugin directory, run `npm install` to install the necessary dependencies.
-7. Run `npm run build` to build the React component.
-8. Upload the entire `carpool-wallet-connect` directory to your WordPress site's `wp-content/plugins/` directory.
-9. Activate the plugin from the WordPress admin panel.
-10. Add the shortcode `[carpool_wallet_connect]` to any page or post where you want the wallet connector to appear.
-11. Set up a cron job or use WordPress's built-in cron to periodically run the `update_all_users_delegation_info()` function to keep user delegation info up to date.
+== Description ==
 
+CarPool Wallet Connect allows users to connect their Cardano wallets and provides tiered discounts for CarPool delegators in WooCommerce.
 
-Remember to thoroughly test the plugin, especially the integration with the Cardano blockchain and WooCommerce discounts. Also, ensure that your server meets all the necessary requirements, including having the required PHP extensions for making HTTP requests to the Blockfrost API.
+== Installation ==
 
-This implementation provides a comprehensive solution for connecting Cardano wallets, tracking delegations, applying discounts, and managing user roles based on their stake in the CarPool. You may need to make adjustments based on your specific WordPress setup and any additional features you want to implement.
+1. Upload the plugin files to the `/wp-content/plugins/carpool-wallet-connect` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress.
+3. Use the Settings->CarPool Wallet Connect screen to configure the plugin.
+
+== Frequently Asked Questions ==
+
+= How do I connect my Cardano wallet? =
+
+Use the "Connect Wallet" button in the header or sidebar to connect your Cardano wallet.
+
+= How are discounts calculated? =
+
+Discounts are calculated based on the amount of ADA delegated to the CarPool stake pool and the duration of delegation.
+
+== Changelog ==
+
+= 1.0.0 =
+* Initial release
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+This is the initial release of the CarPool Wallet Connect plugin.
+
