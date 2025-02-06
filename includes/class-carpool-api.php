@@ -58,6 +58,4 @@ class CarPool_API {
 
         return $epochs;
     }
-
-    // ... (other existing methods)
 }
