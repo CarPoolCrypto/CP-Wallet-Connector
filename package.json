@@ -1,19 +1,16 @@
 {
   "name": "carpool-wallet-connect",
   "version": "1.0.0",
+  "description": "Cardano wallet connector for WordPress with CarPool staking integration",
+  "main": "src/index.tsx",
   "scripts": {
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development --watch"
   },
   "dependencies": {
+    "@meshsdk/core": "^1.5.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@radix-ui/react-select": "^1.2.1",
-    "@radix-ui/react-slot": "^1.0.2",
-    "class-variance-authority": "^0.6.0",
-    "clsx": "^1.2.1",
-    "lucide-react": "^0.244.0",
-    "tailwind-merge": "^1.13.0",
-    "tailwindcss-animate": "^1.0.6"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
@@ -30,3 +27,4 @@
     "webpack-cli": "^5.0.1"
   }
 }
+
