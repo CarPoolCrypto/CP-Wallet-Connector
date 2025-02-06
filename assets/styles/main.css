@@ -1,0 +1,36 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@font-face {
+  font-family: "Ubuntu";
+  src: url("../fonts/Ubuntu-Regular.woff2") format("woff2"), url("../fonts/Ubuntu-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-ubuntu {
+  font-family: "Ubuntu", sans-serif;
+}
+
+.carpool-button {
+  @apply font-ubuntu text-[#0cc43e] border border-[#0cc43e] rounded-[10px] bg-transparent
+         hover:bg-[#0cc43e] hover:text-white transition-all duration-300 px-4 py-2;
+}
+
+.carpool-wallet-icon {
+  @apply w-6 h-6 text-[#0cc43e];
+}
+
+.carpool-wallet-dot {
+  @apply ml-2 w-2 h-2 bg-[#0cc43e] rounded-full;
+}
+
+.carpool-modal {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+}
+
+.carpool-modal-content {
+  @apply bg-[#131c1c] p-6 rounded-lg;
+}
+
