@@ -1,0 +1,52 @@
+.wallet-connect-button {
+    color: #0cc43e;
+    border: 1pt solid #0cc43e;
+    border-radius: 10pt;
+    background: transparent;
+    font-family: 'Ubuntu', sans-serif;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.wallet-connect-button:hover {
+    background: #0cc43e;
+    color: #ffffff;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #131c1c;
+    padding: 20px;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.modal-content ul li {
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.modal-content ul li:hover {
+    text-decoration: underline;
+}
