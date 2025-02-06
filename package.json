@@ -8,9 +8,16 @@
     "dev": "webpack --mode development --watch"
   },
   "dependencies": {
-    "@meshsdk/core": "^1.5.2",
+    "@meshsdk/core": "^1.7.20",
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "crypto-browserify": "^3.12.0",
+    "lucide-react": "^0.263.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "stream-browserify": "^3.0.0",
+    "tailwind-merge": "^1.14.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
