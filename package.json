@@ -18,5 +18,10 @@
     "style-loader": "^2.0.0",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.2"
+  },
+  "resolutions": {
+    "ip": "2.0.0",
+    "bittorrent-tracker": "9.0.0",
+    "webtorrent": "1.0.0"
   }
 }
