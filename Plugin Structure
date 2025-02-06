@@ -1,21 +1,30 @@
-CP-Wallet-Connector/
-├── build/
-│   ├── index.js
-│   ├── style.css
+carpool-wallet-connect/
+├── carpool-wallet-connect.php
 ├── includes/
 │   ├── class-carpool-api.php
-│   ├── class-carpool-cron.php
 │   ├── class-carpool-user-roles.php
 │   ├── class-carpool-wallet-connect.php
 │   ├── class-carpool-woocommerce-integration.php
+│   └── class-carpool-cron.php
 ├── src/
 │   ├── components/
-│   │   ├── StakeButton.js
-│   │   ├── WalletConnectButton.js
-│   ├── lib/
-│   │   ├── CardanoWalletApi.js
-│   ├── styles/
-│   │   ├── index.css
-│   ├── index.js
-├── carpool-wallet-connect.php
+│   │   ├── ui/
+│   │   │   ├── button.tsx
+│   │   │   └── ... (other UI components)
+│   │   ├── ConnectWalletButton.tsx
+│   │   ├── StakeButton.tsx
+│   │   └── WalletConnector.tsx
+│   ├── hooks/
+│   │   └── useWallet.ts
+│   ├── utils/
+│   │   └── cardanoUtils.ts
+│   └── index.tsx
+├── build/
+│   └── index.js
+├── assets/
+│   └── styles/
+│       └── main.css
 ├── webpack.config.js
+├── tsconfig.json
+├── package.json
+└── README.md
