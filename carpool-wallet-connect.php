@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: CarPool Wallet Connect
-Description: Connect Cardano wallets and provide tiered discounts for CarPool delegators.
-Version: 1.1
+Description: Connect Cardano wallets
+Version: 1.0
 Author: CarPoolHealth
 */
 
@@ -22,9 +22,6 @@ class CarPool_Wallet_Connect_Plugin {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_shortcode('carpool_wallet_connect', array($this, 'wallet_connect_shortcode'));
         add_shortcode('carpool_stake_button', array($this, 'stake_button_shortcode'));
-        add_action('wp_ajax_check_delegation', array($this, 'check_delegation'));
-        add_action('wp_ajax_nopriv_check_delegation', array($this, 'check_delegation'));
-        add_filter('the_content', array($this, 'check_content_permissions'));
     }
 
     public function init_plugin() {
@@ -34,50 +31,22 @@ class CarPool_Wallet_Connect_Plugin {
     }
 
     public function enqueue_scripts() {
-        wp_enqueue_script('carpool-wallet-connect', plugin_dir_url(__FILE__) . 'build/index.js', array(), '1.1', true);
+        wp_enqueue_style('carpool-wallet-connect', plugin_dir_url(__FILE__) . 'assets/styles/main.css', array(), '1.0.0');
+        wp_enqueue_script('carpool-wallet-connect', plugin_dir_url(__FILE__) . 'build/index.js', array('react', 'react-dom'), '1.0.0', true);
         wp_localize_script('carpool-wallet-connect', 'carpoolWalletData', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('carpool-wallet-connect'),
         ));
     }
 
-    public function wallet_connect_shortcode($atts) {
-        $a = shortcode_atts(array(
-            'icon_color' => '#000000',
-        ), $atts);
-
-        return '<div id="carpool-wallet-connect" data-icon-color="' . esc_attr($a['icon_color']) . '"></div>';
+    public function wallet_connect_shortcode() {
+        return '<div id="carpool-wallet-connect"></div>';
     }
 
-    public function stake_button_shortcode($atts) {
-        $a = shortcode_atts(array(
-            'text' => 'Stake with CarPool',
-            'color' => '#000000',
-        ), $atts);
-
-        return '<div class="carpool-stake-button" data-text="' . esc_attr($a['text']) . '" data-color="' . esc_attr($a['color']) . '"></div>';
-    }
-
-    public function check_delegation() {
-        // Implement delegation check logic here
-        // This should query the Cardano blockchain or your database
-        // Return delegation info as JSON
-    }
-
-    public function check_content_permissions($content) {
-        if (is_singular() && in_the_loop() && is_main_query()) {
-            $requires_delegation = get_post_meta(get_the_ID(), 'requires_carpool_delegation', true);
-            if ($requires_delegation && !$this->user_is_delegated()) {
-                return 'This content is only available to CarPool delegators.';
-            }
-        }
-        return $content;
-    }
-
-    private function user_is_delegated() {
-        // Implement logic to check if the current user is delegated to CarPool
-        // This might involve checking user meta or querying the blockchain
+    public function stake_button_shortcode() {
+        return '<div id="carpool-stake-button"></div>';
     }
 }
 
 new CarPool_Wallet_Connect_Plugin();
+
