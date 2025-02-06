@@ -1,37 +1,29 @@
-const path = require('path');
+const path = require("path")
 
 module.exports = {
-  entry: './src/index.js',
+  entry: "./src/index.tsx",
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'index.js'
+    filename: "index.js",
+    path: path.resolve(__dirname, "build"),
+  },
+  resolve: {
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    },
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.tsx?$/,
+        use: "ts-loader",
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-        }
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      }
-    ]
+        use: ["style-loader", "css-loader", "postcss-loader"],
+      },
+    ],
   },
-  resolve: {
-    fallback: {
-      "crypto": require.resolve("crypto-browserify"),
-      "stream": require.resolve("stream-browserify")
-    },
-    extensions: ['.js', '.jsx']
-  },
-  experiments: {
-    asyncWebAssembly: true
-  }
-};
+}
+
