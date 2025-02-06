@@ -11,6 +11,7 @@ module.exports = {
     fallback: {
       crypto: require.resolve("crypto-browserify"),
       stream: require.resolve("stream-browserify"),
+      vm: require.resolve("vm-browserify"),
     },
     alias: {
       "@": path.resolve(__dirname, "src"),
@@ -37,5 +38,4 @@ module.exports = {
     asyncWebAssembly: true,
   },
 }
-
 
