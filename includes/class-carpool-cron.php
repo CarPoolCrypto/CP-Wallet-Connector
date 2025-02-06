@@ -1,5 +1,4 @@
 <?php
-// class-carpool-cron.php
 
 class CarPool_Cron {
     private $api;
@@ -20,15 +19,14 @@ class CarPool_Cron {
         $users = get_users(array('role' => 'carpool_delegator'));
         
         foreach ($users as $user) {
-            $delegated_amount = $this->api->get_user_delegated_amount($user->ID);
-            $delegation_epochs = $this->api->get_user_delegation_epochs($user->ID);
-
-            update_user_meta($user->ID, 'carpool_delegated_amount', $delegated_amount);
-            update_user_meta($user->ID, 'carpool_delegation_epochs', $delegation_epochs);
-
-            $this->user_roles->update_user_role($user->ID, $delegated_amount);
+            $wallet_address = get_user_meta($user->ID, 'carpool_wallet_address', true);
+            
+            if ($wallet_address) {
+                $delegation_info = $this->api->get_delegation_info($wallet_address);
+                update_user_meta($user->ID, 'carpool_delegation_info', $delegation_info);
+                $this->user_roles->update_user_role($user->ID, $delegation_info);
+            }
         }
     }
 }
 
-new CarPool_Cron();
