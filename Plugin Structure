@@ -1,36 +1,21 @@
-carpool-wallet-connect/
-├── carpool-wallet-connect.php (main plugin file)
+CP-Wallet-Connector/
+├── build/
+│   ├── index.js
+│   ├── style.css
 ├── includes/
 │   ├── class-carpool-api.php
+│   ├── class-carpool-cron.php
 │   ├── class-carpool-user-roles.php
 │   ├── class-carpool-wallet-connect.php
 │   ├── class-carpool-woocommerce-integration.php
-│   └── class-carpool-cron.php
 ├── src/
 │   ├── components/
-│   │   ├── ui/
-│   │   │   ├── button.tsx
-│   │   │   ├── card.tsx
-│   │   │   ├── select.tsx
-│   │   │   └── alert.tsx
-│   │   └── WalletConnector.tsx
+│   │   ├── StakeButton.js
+│   │   ├── WalletConnectButton.js
 │   ├── lib/
-│   │   └── utils.ts
+│   │   ├── CardanoWalletApi.js
 │   ├── styles/
-│   │   └── globals.css
-│   └── index.tsx
-├── build/
-│   └── index.js (compiled JavaScript)
-├── images/
-    ├── eternl-icon.png
-    ├── vespr-icon.png
-    ├── lace-icon.png
-    ├── nufi-icon.png
-    ├── begin-wallet-icon.png
-    ├── yoroi-icon.png
-    └── game-changer-icon.png
+│   │   ├── index.css
+│   ├── index.js
+├── carpool-wallet-connect.php
 ├── webpack.config.js
-├── tsconfig.json
-├── postcss.config.js
-├── tailwind.config.js
-└── package.json
