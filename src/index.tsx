@@ -1,34 +1,31 @@
-import { createRoot } from "react-dom/client"
-import HeaderWalletConnect from "./components/HeaderWalletConnect"
+import type React from "react"
+import ReactDOM from "react-dom"
+import ConnectWalletButton from "./components/ConnectWalletButton"
 import StakeButton from "./components/StakeButton"
+import { useWallet } from "./hooks/useWallet"
+
+const App: React.FC = () => {
+  const { wallet, connectWallet, disconnectWallet, stakeWithCarPool } = useWallet()
+
+  return (
+    <>
+      <ConnectWalletButton isConnected={!!wallet} />
+      <StakeButton onStake={stakeWithCarPool} />
+    </>
+  )
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Render HeaderWalletConnect
-  const headerWalletConnectContainer = document.getElementById("carpool-wallet-connect")
-  if (headerWalletConnectContainer) {
-    const iconColor = headerWalletConnectContainer.getAttribute("data-icon-color") || "#000000"
-    const root = createRoot(headerWalletConnectContainer)
-    root.render(<HeaderWalletConnect iconColor={iconColor} />)
+  const walletConnectContainer = document.getElementById("carpool-wallet-connect")
+  if (walletConnectContainer) {
+    ReactDOM.render(<App />, walletConnectContainer)
   }
 
-  // Render StakeButtons
-  const stakeButtons = document.getElementsByClassName("carpool-stake-button")
-  Array.from(stakeButtons).forEach((button) => {
-    const text =
-      button instanceof HTMLElement ? button.getAttribute("data-text") || "Stake with CarPool" : "Stake with CarPool"
-    const color = button instanceof HTMLElement ? button.getAttribute("data-color") || "#000000" : "#000000"
-    const root = createRoot(button)
-    root.render(
-      <StakeButton
-        text={text}
-        color={color}
-        onStake={() => {
-          // Implement staking logic here
-          console.log("Staking with CarPool")
-        }}
-      />,
-    )
-  })
+  const stakeButtonContainer = document.getElementById("carpool-stake-button")
+  if (stakeButtonContainer) {
+    ReactDOM.render(<StakeButton onStake={() => console.log("Staking...")} />, stakeButtonContainer)
+  }
 })
+
 
 
