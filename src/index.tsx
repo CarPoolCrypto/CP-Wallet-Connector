@@ -16,16 +16,15 @@ const App: React.FC = () => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const walletConnectContainer = document.getElementById("carpool-wallet-connect")
+  const walletConnectContainer = document.getElementById("carpool-wallet-connect");
   if (walletConnectContainer) {
-    ReactDOM.render(<App />, walletConnectContainer)
+    ReactDOM.render(<ConnectWalletButton />, walletConnectContainer);
   }
 
-  const stakeButtonContainer = document.getElementById("carpool-stake-button")
+  const stakeButtonContainer = document.getElementById("carpool-stake-button");
   if (stakeButtonContainer) {
-    ReactDOM.render(<StakeButton onStake={() => console.log("Staking...")} />, stakeButtonContainer)
+    ReactDOM.render(<StakeButton />, stakeButtonContainer);
   }
-})
-
+});
 
 
