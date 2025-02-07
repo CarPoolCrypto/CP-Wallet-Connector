@@ -22,3 +22,4 @@ const StakeButton: React.FC<StakeButtonProps> = ({ onStake }) => {
 
 export default StakeButton
 
+
